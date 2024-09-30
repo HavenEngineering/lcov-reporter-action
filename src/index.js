@@ -59,6 +59,9 @@ async function main() {
 		options.changedFiles = await getChangedFiles(githubClient, options, context)
 	}
 
+	console.log('PRINT options...');
+	console.log(options.changedFiles)
+
 	const lcov = await parse(raw)
 	const baselcov = baseRaw && (await parse(baseRaw))
 	const body = diff(lcov, baselcov, options).substring(0, MAX_COMMENT_CHARS)

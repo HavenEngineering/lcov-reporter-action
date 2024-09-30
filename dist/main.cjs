@@ -30424,7 +30424,11 @@ function filterAndNormaliseLcov(lcov, options) {
 }
 
 function shouldBeIncluded(fileName, options) {
-	return !options.shouldFilterChangedFiles
+	if (!options.shouldFilterChangedFiles) {
+		return true
+	}
+	
+	return options.changedFiles.includes(fileName.replace(options.prefix, ""))
 }
 
 function toFolder(path) {
@@ -30716,6 +30720,9 @@ async function main() {
 	if (shouldFilterChangedFiles) {
 		options.changedFiles = await getChangedFiles(githubClient, options, context);
 	}
+
+	console.log('PRINT options...');
+	console.log(options.changedFiles);
 
 	const lcov = await parse(raw);
 	const baselcov = baseRaw && (await parse(baseRaw));
